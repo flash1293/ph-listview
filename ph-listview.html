@@ -25,7 +25,7 @@ own parse function, you must return an array which aligns with the following for
     }]
     ...
 
-Please note: The date must be parseable by the `Moment.js` library. If you use a custom format you can refer to the 
+Please note: The date must be parseable by the `Moment.js` library. If you use a custom format you can refer to the
 [String + Format section](http://momentjs.com/docs/#/parsing/string-format/) for more information of valid string formats.
 
 ##### Example 1
@@ -89,22 +89,16 @@ Please note: The date must be parseable by the `Moment.js` library. If you use a
 @status alpha
 @homepage http://silentHoo.github.io/ph-listview
 -->
-<polymer-element name="ph-listview" constructor="PhListView">
+<dom-module id="ph-listview">
   <template>
     <link rel="stylesheet" href="ph-listview.css">
     <script type="text/javascript" src="../moment/min/moment.min.js"></script>
-    
+
     <!-- non-visible 3rd party component -->
-    <core-ajax auto url="{{ feed }}" on-core-complete="{{ _requestCompleted }}"></core-ajax>
+    <iron-ajax auto url="{{ feed }}" on-response="_requestCompleted"></iron-ajax>
 
     <!-- template binding to 'default' -->
-    <template if="{{ (viewType == 'default') && _entries.length > 0 }}" ref="template-default"></template>
-
-    <!-- template binding to 'compact' -->
-    <template if="{{ viewType == 'compact' && _entries.length > 0 }}" ref="template-compact"></template>
-
-    <!-- template definition for 'default' -->
-    <template id="template-default">
+    <template is="dom-if" if="{{ (viewType == 'default') && _entries.length > 0 }}">
       <!-- make sure you are 'fit' the given space! -->
       <core-list data="{{ _entries | _filterSortEntries }}" fit>
         <template>
@@ -128,8 +122,8 @@ Please note: The date must be parseable by the `Moment.js` library. If you use a
       </core-list>
     </template>
 
-    <!-- template definition for 'compact' -->
-    <template id="template-compact">
+    <!-- template binding to 'compact' -->
+    <template is="dom-if" if="{{ viewType == 'compact' && _entries.length > 0 }}">
       <!-- make sure you are 'fit' the given space! -->
       <core-list data="{{ _entries | _filterSortEntries }}" fit>
         <template>
@@ -147,7 +141,6 @@ Please note: The date must be parseable by the `Moment.js` library. If you use a
         </template>
       </core-list>
     </template>
-
   </template>
 
   <script>
@@ -167,6 +160,11 @@ Please note: The date must be parseable by the `Moment.js` library. If you use a
         return response;
       };
 
+      Polymer({
+        is: 'ph-listview',
+        properties: {
+
+        },
       Polymer(Polymer.mixin({ // Mixins @see https://www.polymer-project.org/0.5/docs/polymer/helpers.html#using-mixins
 
         /**
